@@ -64,7 +64,7 @@ const Home = () => {
 
             
     <h1 id="name" className='name'>Innovation Driven team</h1>
-    <h2 className='name'> Renowned for Technical Excellence</h2>
+    <h4 className='name1'> Renowned for Technical Excellence</h4>
     <br />
         <p className='txt'>
             IEC Established in 2002, IEC is a leading electronics company headquartered in the vibrant city of New York, NY 10012, US. With nearly two decades of industry expertise, IEC has garnered a reputation for excellence in delivering cutting-edge electronic solutions across diverse sectors. Our commitment to innovation, quality, and customer satisfaction has propelled us to the forefront of the electronics industry. At IEC, we specialize in designing, developing, and manufacturing innovative electronic products and solutions that meet the evolving needs of our clients. From consumer electronics to industrial automation, our comprehensive range of services encompasses product design, prototyping, manufacturing, and beyond. Our dedicated team of engineers, technicians, and professionals are driven by a passion for technology and a relentless pursuit of excellence.

@@ -128,7 +128,13 @@
  
   font-size: 3.2em; /* Adjust the font size as needed */
 }
+.name1 {
+  text-align: center;
+  font-family: 'Times New Roman', Times, serif;
+  margin-top: 15px;
 
+  font-size: 2.6em; /* Adjust the font size as needed */
+}
 .image-container {
   display: grid;
   grid-template-columns: repeat(4, 1fr); /* Four columns with equal width */
@@ -138,4 +144,18 @@
 .image-container img {
   width: 100%; /* Ensure all images take up the full width of their grid cell */
   height: auto; /* Maintain aspect ratio */
+}
+/* Adjust the position and styling of buttons for smaller screens */
+@media (max-width: 768px) {
+  .text-container {
+    max-width: 80%; /* Adjust the max-width for better button positioning */
+    text-align: center; /* Center-align text for better readability */
+    padding: 10px; /* Reduce padding for smaller screens */
+  }
+
+  .contact-button,
+  .service-button {
+    margin: 10px auto; /* Center-align buttons and add spacing between them */
+    display: block; /* Ensure buttons take full width on smaller screens */
+  }
 }
