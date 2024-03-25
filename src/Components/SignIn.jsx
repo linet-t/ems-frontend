@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; 
 import Navbar from './Navbar'; 
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -14,6 +15,8 @@ import Footer from './Footer';
 const theme = createTheme();
 
 const SignIn = () => {
+  const navigate = useNavigate(); 
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -27,13 +30,17 @@ const SignIn = () => {
             },
             body: JSON.stringify({ email, password }),
         });
-
         if (response.ok) {
-            const data = await response.text();
-            if (data === "Signin successful for admin") {
-                window.location.href = '/Admin';
-            } else if (data === "Signin successful for staff") {
-                window.location.href = '/Employee';
+            const data = await response.json(); 
+            if (data.message === "Signin successful for admin") {               
+                navigate("/Admin");
+            } else if (data.message === "Signin successful for staff") {    
+                       
+                sessionStorage.setItem("empId", data.userId);
+
+
+                console.log("Employee ID:", data.userId);               
+                navigate("/Employee");
             }
         } else {
             throw new Error('Signin failed');
@@ -61,7 +68,7 @@ const SignIn = () => {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          justifyContent: 'center', // Center vertically
+          justifyContent: 'center', 
         }}
       >
         <CssBaseline />

@@ -13,6 +13,10 @@ const Services = () => {
       <h1 className='head'>OUR SERVICES</h1>
       <br />
       <p className='txt'>At IEC (Innovative Electronics Corporation), we are driven by a relentless passion for innovation and excellence in the field of electronics. With a rich history of pioneering advancements and a forward-thinking approach, we stand at the forefront of technological evolution. Our dedicated team of experts is committed to delivering unparalleled solutions that redefine the boundaries of possibility. From crafting state-of-the-art embedded systems to providing strategic consulting services that navigate the complexities of the industry, we are your trusted partner in realizing your vision. With a focus on quality, reliability, and customer satisfaction, we strive to exceed expectations and leave a lasting impact on the world. Join us on our journey of innovation, and together, let's shape a future powered by cutting-edge electronics.</p>
+      
+      <p className='txt'>
+        Our commitment to innovation extends beyond just product development. We understand that every client is unique, with distinct needs and challenges. That's why we offer a tailored approach to every project, combining our technical expertise with a deep understanding of your business goals. Whether you require specialized electronic solutions, strategic consulting, or comprehensive product design services, we have the capabilities and experience to deliver results that drive your success.
+    </p>
     <div style={{ backgroundColor: '#f5f5f5' }}> {/* Added a container div with a grey background */}
       <div className="container py-5"> {/* Wrapped the cards inside a container */}
       <div className="row row-cols-1 row-cols-md-4 g-4">
@@ -23,10 +27,8 @@ const Services = () => {
             <div className="card-body">
               <h5 className="card-title">Embedded Services</h5>
               </div>
-              <p className="card-text" style={{ textAlign: 'justify', fontFamily: 'Times New Roman' }}> Developing embedded systems for various applications, such as IoT devices, wearable technology, automotive electronics, and industrial automation.
-</p>
-              <br />
-            
+              <p className="card-text" style={{ textAlign: 'justify', fontFamily: 'Times New Roman' }}> Developing embedded systems for various applications, such as IoT devices, wearable technology, automotive electronics, and industrial automation.</p>
+              <br />          
           </div>
         </div>
         <div className="col">

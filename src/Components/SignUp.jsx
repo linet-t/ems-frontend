@@ -11,6 +11,8 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Footer from './Footer';
+import Navbar1 from './Navbar1';
+
 const theme = createTheme();
 
 const SignUp = () => {
@@ -93,7 +95,7 @@ const SignUp = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Navbar />
+      <Navbar1/>
       <Container component="main" maxWidth="xs">
         <Box
           sx={{

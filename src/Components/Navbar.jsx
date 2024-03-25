@@ -40,14 +40,14 @@ export default function Navbar() {
               <NavLink component={RouterLink} to="/login" style={{ textDecoration: 'none', color: 'inherit' }}>
                 Login
               </NavLink>
-              <NavLink component={RouterLink} to="/#about" style={{ textDecoration: 'none', color: 'inherit' }}>
+              <NavLink component={RouterLink} to="/#name" style={{ textDecoration: 'none', color: 'inherit' }}>
                 About Us
               </NavLink>
               <NavLink component={RouterLink} to="/#services" style={{ textDecoration: 'none', color: 'inherit' }}>
                 Services
               </NavLink>
               <NavLink component={RouterLink} to="/#contact" style={{ textDecoration: 'none', color: 'inherit' }}>
-                Contact
+                Contact Us
               </NavLink>
             </Box>
           </Box>
