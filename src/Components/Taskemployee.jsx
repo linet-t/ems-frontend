@@ -1,23 +1,29 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
-
+import React, { useEffect, useState } from 'react';
+import Navbar from './Navbar';
 import { Card, CardContent, Typography } from '@mui/material';
-import Navbar2 from './Navbar2';
-import Footer from './Footer';
+
 const Taskemployee = () => {
-    const[data,setData]=useState([]);
-    useEffect(() => {
-        axios.get('http://localhost:8080/tasktasklist/{employeeid}')
-          .then(response => {
-            setData(response.data);
-          })
-          .catch(error => {
-            console.error('Error fetching data:', error);
-          });
-      }, []);
+  // Access the employee ID from sessionStorage
+  const empId = sessionStorage.getItem('empId');
+  
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    axios.post('http://localhost:8080/task/taskemployee', { id: empId })
+      .then(response => {
+        console.log('Response data:', response.data); // Add this line to check response data
+        setData(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
+  }, [empId]);
+  
+
   return (
     <div>
-      <Navbar2/>
+      <Navbar />
       <h1>Task Assigned</h1>
       {data.map((item, index) => (
         <Card key={index} variant="outlined" style={{ margin: '1rem' }}>
@@ -37,9 +43,8 @@ const Taskemployee = () => {
           </CardContent>
         </Card>
       ))}
-      <Footer/>
     </div>
-  )
-}
+  );
+};
 
-export default Taskemployee
+export default Taskemployee;

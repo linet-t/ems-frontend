@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import './Task.css';
 import axios from 'axios';
-
+import Navbar1 from './Navbar1';
+import Footer from './Footer';
 const Task = () => {
   const [taskdata, setTaskdata] = useState({
     employeeid: "",
@@ -23,6 +24,8 @@ const Task = () => {
   }
 
   return (
+    <div>
+    <Navbar1 /> 
     <div id='taskdesign' className='taskpage'>
       <h3>Task Handler</h3>
       <br /><br />
@@ -78,6 +81,8 @@ const Task = () => {
           </div>
         </div>
       </div>
+    </div>
+    <Footer />
     </div>
   );
 };
