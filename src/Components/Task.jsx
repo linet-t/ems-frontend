@@ -1,89 +1,156 @@
 import React, { useState } from 'react';
-import './Task.css';
 import axios from 'axios';
 import Navbar1 from './Navbar1';
 import Footer from './Footer';
+import { Box, Button, TextField, Typography, Container, Grid, CssBaseline, Avatar } from '@mui/material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+
+const theme = createTheme();
+
 const Task = () => {
-  const [taskdata, setTaskdata] = useState({
-    employeeid: "",
-    task_name: "",
-    task_count: ""
+  const [taskData, setTaskData] = useState({
+    employeeId: '',
+    taskName: '',
+    taskCount: ''
   });
 
-  function capturedata() {
-    console.log(taskdata);
-    axios.post('http://localhost:8080/task/tasksave', taskdata)
+  const [errors, setErrors] = useState({
+    employeeId: false,
+    taskName: false,
+    taskCount: false
+  });
+
+  const captureData = () => {
+    // Check for empty fields
+    if (!taskData.employeeId || !taskData.taskName || !taskData.taskCount) {
+      setErrors({
+        employeeId: !taskData.employeeId,
+        taskName: !taskData.taskName,
+        taskCount: !taskData.taskCount
+      });
+      return;
+    }
+  
+    axios.post('http://localhost:8080/task/tasksave', taskData)
       .then((res) => {
         console.log(res);
         alert('Task sent successfully');
+        // Clear the form after submission
+        setTaskData({
+          employeeId: '',
+          taskName: '',
+          taskCount: ''
+        });
+        // Reset errors
+        setErrors({
+          employeeId: false,
+          taskName: false,
+          taskCount: false
+        });
       })
       .catch((error) => {
         console.error('Error sending task:', error);
         alert('Error sending task');
       });
-  }
+  };
+  
 
   return (
-    <div>
-    <Navbar1 /> 
-    <div id='taskdesign' className='taskpage'>
-      <h3>Task Handler</h3>
-      <br /><br />
-      <div className="container">
-        <div id='cardesign' className="card">
-          <div className="col col-3 col-lg-12 col-sm-12 col-md-12 col-xl-12 col-xxl-12">
-            <div className="card-body">
-              <div className="row g-3">
-                <div className="col col-12 col-sm-6 col-xl-6 col-xxl-6 col-md-12">
-                  <label htmlFor="employeeid" className='form-label'>Employee ID</label>
-                  <input
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Navbar1 />
+      <Box
+        sx={{
+          backgroundColor: 'rgb(224, 224, 224)', // Dark grey background color
+
+          minHeight: '100vh', // Set minimum height to fill the screen
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Container component="main" maxWidth="xs">
+          <Box
+            sx={{
+              backgroundColor: 'white', // White background color for the form
+              p: 3,
+              borderRadius: 8,
+              border: '2px solid #ccc',
+              boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              marginTop: '80px',
+              marginBottom: '20px',
+            }}
+          >
+            <Avatar sx={{ m: 1, bgcolor: 'secondary.main', backgroundColor: 'red' }}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h6" fontWeight="bold" style={{ fontFamily: 'Arial', marginTop: '10px' }}>
+              Task Handler
+            </Typography>
+            <form onSubmit={(e) => e.preventDefault()} style={{ width: '100%', marginTop: '1rem' }}>
+
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    id="employeeId"
+                    label="Employee ID"
                     type="number"
-                    className='form-control'
-                    id='employeeid'
-                    name='Employee_id'
-                    value={taskdata.employeeid}
-                    onChange={(e) => {
-                      setTaskdata({ ...taskdata, employeeid: e.target.value });
-                    }}
+                    fullWidth
+                    value={taskData.employeeId}
+                    onChange={(event) => setTaskData({ ...taskData, employeeId: event.target.value })}
+                    error={errors.employeeId}
+                    helperText={errors.employeeId ? "Employee ID is required" : ""}
+                    sx={{ '& label.Mui-focused': { color: 'black' }, '& .MuiOutlinedInput-root': { '&.Mui-focused fieldset': { borderColor: 'black' } } }}
                   />
-                </div>
-                <div className="col col-12 col-sm-6 col-xl-6 col-xxl-6 col-md-12">
-                  <label htmlFor="taskname" className='form-label'>Task Name</label>
-                  <input
-                    type="text"
-                    className='form-control large-textbox'
-                    id='taskname'
-                    name='task_name'
-                    value={taskdata.task_name}
-                    onChange={(e) => {
-                      setTaskdata({ ...taskdata, task_name: e.target.value });
-                    }}
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    id="taskName"
+                    label="Task Name"
+                    fullWidth
+                    value={taskData.taskName}
+                    onChange={(event) => setTaskData({ ...taskData, taskName: event.target.value })}
+                    error={errors.taskName}
+                    helperText={errors.taskName ? "Task Name is required" : ""}
+                    sx={{ '& label.Mui-focused': { color: 'black' }, '& .MuiOutlinedInput-root': { '&.Mui-focused fieldset': { borderColor: 'black' } } }}
                   />
-                </div>
-                <div className="col col-12 col-sm-6 col-xl-6 col-xxl-6 col-md-12">
-                  <label htmlFor="taskcount" className='form-label'>Task Count</label>
-                  <input
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    id="taskCount"
+                    label="Task Count"
                     type="number"
-                    className='form-control'
-                    id='taskcount'
-                    name='task_count'
-                    value={taskdata.task_count}
-                    onChange={(e) => {
-                      setTaskdata({ ...taskdata, task_count: e.target.value });
-                    }}
+                    fullWidth
+                    value={taskData.taskCount}
+                    onChange={(event) => setTaskData({ ...taskData, taskCount: event.target.value })}
+                    error={errors.taskCount}
+                    helperText={errors.taskCount ? "Task Count is required" : ""}
+                    sx={{ '& label.Mui-focused': { color: 'black' }, '& .MuiOutlinedInput-root': { '&.Mui-focused fieldset': { borderColor: 'black' } } }}
                   />
-                </div>
-                <div className="col col-12 col-sm-6 col-xl-6 col-xxl-6 col-md-12">
-                  <button className='btn btn-dark' id='button' name='taskbutton' onClick={capturedata}>Send</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <Footer />
-    </div>
+                </Grid>
+              </Grid>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                style={{ margin: '1rem 0', backgroundColor: 'black' }}
+                onClick={captureData}
+                sx={{ '& label.Mui-focused': { color: 'black' }, '& .MuiOutlinedInput-root': { '&.Mui-focused fieldset': { borderColor: 'black' } } }}
+              >
+                Send
+              </Button>
+            </form>
+          </Box>
+        </Container>
+      </Box>
+      <Footer />
+    </ThemeProvider>
   );
 };
 

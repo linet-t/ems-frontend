@@ -1,166 +1,211 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import Navbar2 from './Navbar2';
+import Navbar from './Navbar';
 import Footer from './Footer';
-import { Box, Button, TextField } from '@mui/material';
+import Section from './Section'; // Import the Section component
+import { Box, Button, TextField, Typography, Container, Grid, Avatar } from '@mui/material';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import axios from 'axios';
 
 const LeaveEmployee = () => {
   const [leaveData, setLeaveData] = useState({
+    employeeId: '',
     leaveType: '',
-    reason: '',
     startDate: '',
-    endDate: ''
+    endDate: '',
+    reason: ''
   });
 
   const [errors, setErrors] = useState({
+    employeeId: false,
     leaveType: false,
-    reason: false,
     startDate: false,
-    endDate: false
+    endDate: false,
+    reason: false
   });
 
-  const captureValue = () => {
-    if (!leaveData.leaveType || !leaveData.reason || !leaveData.startDate || !leaveData.endDate) {
+  const captureLeaveData = () => {
+    // Check if all fields are filled
+    if (!leaveData.employeeId || !leaveData.leaveType || !leaveData.startDate || !leaveData.endDate || !leaveData.reason) {
       setErrors({
+        employeeId: !leaveData.employeeId,
         leaveType: !leaveData.leaveType,
-        reason: !leaveData.reason,
         startDate: !leaveData.startDate,
-        endDate: !leaveData.endDate
+        endDate: !leaveData.endDate,
+        reason: !leaveData.reason
       });
       return;
     }
-  
-    console.log(leaveData);
-    axios.post('http://localhost:8080/leave/save', leaveData)
+
+    axios.post('http://localhost:8080/leave/apply', leaveData)
       .then((res) => {
         console.log(res);
-        alert("Leave application submitted successfully"); // Fixed the alert message
+        alert('Leave application submitted successfully');
+        setLeaveData({
+          employeeId: '',
+          leaveType: '',
+          startDate: '',
+          endDate: '',
+          reason: ''
+        });
+        setErrors({
+          employeeId: false,
+          leaveType: false,
+          startDate: false,
+          endDate: false,
+          reason: false
+        });
       })
       .catch((error) => {
         console.error('Error submitting leave application:', error);
-        alert("Failed to submit leave application. Please try again."); // Fixed the alert message
+        alert('Failed to submit leave application. Please try again.');
       });
   };
-  
-  const handleStartDateChange = (event) => {
-    const startDate = event.target.value;
-    const endDate = leaveData.endDate;
 
-    if (new Date(startDate) < new Date()) {
-      setErrors({ ...errors, startDate: true });
-    } else {
-      setErrors({ ...errors, startDate: false });
-    }
-
-    if (endDate && new Date(startDate) >= new Date(endDate)) {
-      setErrors({ ...errors, endDate: true });
-    } else {
-      setErrors({ ...errors, endDate: false });
-    }
-
-    setLeaveData({ ...leaveData, startDate });
-  };
-
-  const handleEndDateChange = (event) => {
-    const endDate = event.target.value;
-    const startDate = leaveData.startDate;
-
-    if (new Date(endDate) <= new Date(startDate)) {
-      setErrors({ ...errors, endDate: true });
-    } else {
-      setErrors({ ...errors, endDate: false });
-    }
-
-    setLeaveData({ ...leaveData, endDate });
+  const linkStyle = {
+    textDecoration: 'none',
+    color: 'black',
+    display: 'block',
+    marginTop: '30px',
+    fontFamily: 'Times New Roman',
+    textAlign: 'center'
   };
 
   return (
     <div>
-      <Navbar2 />
-      <br />
-      <div className="container">
-        <div className="card-container">
-          <div className="card">
-            <br />
-            <h2 style={{ fontFamily: 'Times New Roman', fontWeight: 'bold', textAlign: 'center' }}>LEAVE APPLICATION FORM</h2>
-
-            <div className="card-body">
-              <Box
-                component="form"
-                sx={{
-                  '& .MuiTextField-root': { m: 1, width: '35ch' },
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '1rem',
-                  alignItems: 'center', // Centering the form
-                  border: 'none' // Remove default border
-                }}
-                noValidate
-                autoComplete="off"
-              >
-                <div>
-                  <TextField
-                    id="leaveType"
-                    label="Leave Type"
-                    multiline
-                    rows={1}
-                    value={leaveData.leaveType}
-                    onChange={(event) => setLeaveData({ ...leaveData, leaveType: event.target.value })}
-                    error={errors.leaveType}
-                    helperText={errors.leaveType ? "Leave type is required" : ""}
-                  />
-                </div>
-                <div>
-                  <TextField
-                    id="reason"
-                    label="Reason"
-                    multiline
-                    rows={3}
-                    value={leaveData.reason}
-                    onChange={(event) => setLeaveData({ ...leaveData, reason: event.target.value })}
-                    error={errors.reason}
-                    helperText={errors.reason ? "Reason is required" : ""}
-                  />
-                </div>
-                <div>
-                  <TextField
-                    id="startDate"
-                    label="Start Date"
-                    type="date"
-                    value={leaveData.startDate}
-                    onChange={handleStartDateChange}
-                    error={errors.startDate}
-                    helperText={errors.startDate ? "Start date is required and cannot be in the past" : ""}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                  />
-                </div>
-                <div>
-                  <TextField
-                    id="endDate"
-                    label="End Date"
-                    type="date"
-                    value={leaveData.endDate}
-                    onChange={handleEndDateChange}
-                    error={errors.endDate}
-                    helperText={errors.endDate ? "End date must be greater than start date" : ""}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                  />
-                </div>
-                <div>
-                  <Button variant="contained" onClick={captureValue} style={{ color: 'white', backgroundColor: 'black' }}>Submit Leave Application</Button>
-                </div>
-              </Box>
-            </div>
+      <Navbar />
+      <div className="container-fluid" style={{ marginTop: '70px' }}> {/* Adjusted top margin */}
+        <div className="row">
+          <div className="col-12 col-md-3">
+            {/* Use the Section component here */}
+            <Section />
+          </div>
+          <div className="col-12 col-md-9">
+            <Box
+              sx={{
+                minHeight: '100vh',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Container component="main" maxWidth="xs">
+                <Box
+                  sx={{
+                    backgroundColor: 'white',
+                    p: 3,
+                    borderRadius: 8,
+                    border: '2px solid #ccc',
+                    boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    marginTop: '80px',
+                    marginBottom: '20px',
+                  }}
+                >
+                  <Avatar sx={{ m: 1, bgcolor: 'secondary.main', backgroundColor: 'red' }}>
+                    <LockOutlinedIcon />
+                  </Avatar>
+                  <Typography component="h1" variant="h6" fontWeight="bold" style={{ fontFamily: 'Arial', marginTop: '10px' }}>
+                    Leave Application
+                  </Typography>
+                  <form onSubmit={(e) => e.preventDefault()} style={{ width: '100%', marginTop: '1rem' }}>
+                    <Grid container spacing={2}>
+                      <Grid item xs={12}>
+                        <TextField
+                          id="employeeId"
+                          label="Employee ID"
+                          fullWidth
+                          required
+                          error={errors.employeeId}
+                          value={leaveData.employeeId}
+                          onChange={(event) => setLeaveData({ ...leaveData, employeeId: event.target.value })}
+                          helperText={errors.employeeId ? "Employee ID is required" : ""}
+                          sx={{ '& label.Mui-focused': { color: 'black' }, '& .MuiOutlinedInput-root': { '&.Mui-focused fieldset': { borderColor: 'black' } } }}
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          id="leaveType"
+                          label="Leave Type"
+                          fullWidth
+                          required
+                          error={errors.leaveType}
+                          value={leaveData.leaveType}
+                          onChange={(event) => setLeaveData({ ...leaveData, leaveType: event.target.value })}
+                          helperText={errors.leaveType ? "Leave type is required" : ""}
+                          sx={{ '& label.Mui-focused': { color: 'black' }, '& .MuiOutlinedInput-root': { '&.Mui-focused fieldset': { borderColor: 'black' } } }}
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          id="startDate"
+                          label="Start Date"
+                          type="date"
+                          fullWidth
+                          required
+                          error={errors.startDate}
+                          value={leaveData.startDate}
+                          onChange={(event) => setLeaveData({ ...leaveData, startDate: event.target.value })}
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                          helperText={errors.startDate ? "Start date is required" : ""}
+                          sx={{ '& label.Mui-focused': { color: 'black' }, '& .MuiOutlinedInput-root': { '&.Mui-focused fieldset': { borderColor: 'black' } } }}
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          id="endDate"
+                          label="End Date"
+                          type="date"
+                          fullWidth
+                          required
+                          error={errors.endDate}
+                          value={leaveData.endDate}
+                          onChange={(event) => setLeaveData({ ...leaveData, endDate: event.target.value })}
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                          helperText={errors.endDate ? "End date is required" : ""}
+                          sx={{ '& label.Mui-focused': { color: 'black' }, '& .MuiOutlinedInput-root': { '&.Mui-focused fieldset': { borderColor: 'black' } } }}
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          id="reason"
+                          label="Reason"
+                          fullWidth
+                          required
+                          error={errors.reason}
+                          value={leaveData.reason}
+                          onChange={(event) => setLeaveData({ ...leaveData, reason: event.target.value })}
+                          helperText={errors.reason ? "Reason is required" : ""}
+                          sx={{ '& label.Mui-focused': { color: 'black' }, '& .MuiOutlinedInput-root': { '&.Mui-focused fieldset': { borderColor: 'black' } } }}
+                        />
+                      </Grid>
+                    </Grid>
+                    <Button
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                      color="primary"
+                      style={{ margin: '1rem 0', backgroundColor: 'black' }}
+                      onClick={captureLeaveData}
+                    >
+                      Apply
+                    </Button>
+                  </form>
+                </Box>
+              </Container>
+            </Box>
           </div>
         </div>
       </div>
       <Footer />
     </div>
   );
-};
+}
 
 export default LeaveEmployee;

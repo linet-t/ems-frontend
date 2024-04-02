@@ -14,6 +14,7 @@ import FeedbackEmployee from './Components/FeedbackEmployee';
 import EventEmployee from './Components/Eventemployee';
 import LeaveEmployee from './Components/Leave employee';
 import Taskemployee from './Components/Taskemployee';
+import Section from './Components/Section';
 
 
 
@@ -36,6 +37,7 @@ function App() {
           <Route path="/eventemployee" element={<EventEmployee/>} />
           <Route path="/leaveemployee" element={<LeaveEmployee/>} />
           <Route path="/taskemployee" element={<Taskemployee />} />
+          <Route path="/section" element={<Section />} />
           
         <Route path="/feedback" element={<Feedback />} />
         </Routes>
