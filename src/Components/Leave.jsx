@@ -13,6 +13,7 @@ class Leave extends Component {
 
   async componentDidMount() {
     try {
+      // Make a GET request to fetch pending leave data
       const response = await axios.get('http://localhost:8080/leave/pending');
       this.setState({ pendingLeave: response.data });
     } catch (error) {
@@ -22,13 +23,12 @@ class Leave extends Component {
 
   handleApprove = async (id) => {
     try {
-      await axios.post(`http://localhost:8080/leave/approve/${id}`); // Fixed the template literal syntax
+      await axios.post(`http://localhost:8080/leave/approve/${id}`);
+      
       const updatedLeave = this.state.pendingLeave.filter((leave) => leave.id !== id);
       this.setState({ pendingLeave: updatedLeave }, () => {
-        alert('Leave approved successfully.'); // Wrapped the string in quotes
-        window.location.href = '/Leave';
+        alert('Leave approved successfully.');
       });
-      await this.fetchPendingLeave(); // fetchPendingLeave() is not defined, consider removing or defining it
     } catch (error) {
       console.error('Error approving leave:', error);
     }
@@ -36,13 +36,12 @@ class Leave extends Component {
 
   handleReject = async (id) => {
     try {
-      await axios.post(`http://localhost:8080/leave/reject/${id}`); // Fixed the template literal syntax
+      await axios.post(`http://localhost:8080/leave/reject/${id}`);
+      
       const updatedLeave = this.state.pendingLeave.filter((leave) => leave.id !== id);
       this.setState({ pendingLeave: updatedLeave }, () => {
-        alert('Leave rejected successfully.'); // Wrapped the string in quotes
-        window.location.href = '/Leave';
+        alert('Leave rejected successfully.');
       });
-      await this.fetchPendingLeave(); // fetchPendingLeave() is not defined, consider removing or defining it
     } catch (error) {
       console.error('Error rejecting leave:', error);
     }
@@ -55,6 +54,7 @@ class Leave extends Component {
       <div>
         <Navbar1 /> 
         <h2 style={{ textAlign: 'center', fontFamily: 'Times New Roman', marginTop: '80px' }}>PENDING LEAVE REQUESTS</h2>
+
         <div style={{ display: 'flex', justifyContent: 'center', padding: '20px' }}>
           <div>
             <table style={{ borderCollapse: 'collapse', width: '100%' }}>
@@ -70,30 +70,30 @@ class Leave extends Component {
                 </tr>
               </thead>
               <tbody>
-                {pendingLeave.map((leave, index) => (
-                  <tr key={index} style={{ backgroundColor: '#fff' }}> {/* Fixed key */}
-                    <td style={{ border: '1px solid #ddd', padding: '8px', fontFamily: 'Times New Roman' }}>{index + 1}</td>
-                    <td style={{ border: '1px solid #ddd', padding: '8px', fontFamily: 'Times New Roman' }}>{leave.employee}</td> {/* Adjusted property */}
-                    <td style={{ border: '1px solid #ddd', padding: '8px', fontFamily: 'Times New Roman' }}>{leave.leaveType}</td> {/* Adjusted property */}
-                    <td style={{ border: '1px solid #ddd', padding: '8px', fontFamily: 'Times New Roman' }}>{leave.reason}</td> {/* Adjusted property */}
-                    <td style={{ border: '1px solid #ddd', padding: '8px', fontFamily: 'Times New Roman' }}>{new Date(leave.startDate).toLocaleDateString()}</td> {/* Adjusted property */}
-                    <td style={{ border: '1px solid #ddd', padding: '8px', fontFamily: 'Times New Roman' }}>{new Date(leave.endDate).toLocaleDateString()}</td> {/* Adjusted property */}
-                    <td style={{ border: '1px solid #ddd', padding: '8px', fontFamily: 'Times New Roman' }}>
-                      <button
-                        style={{ backgroundColor: 'green', color: 'white', marginRight: '5px' }}
-                        onClick={() => this.handleApprove(leave.id)}
-                      >
-                        Approve
-                      </button>
-                      <button
-                        style={{ backgroundColor: 'red', color: 'white', fontFamily: 'Times New Roman' }}
-                        onClick={() => this.handleReject(leave.id)}
-                      >
-                        Reject
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+              {pendingLeave.map((leave, index) => (
+                  <tr key={leave.id} style={{ backgroundColor: '#fff' }}>
+                  <td style={{ border: '1px solid #ddd', padding: '8px', fontFamily: 'Times New Roman' }}>{index + 1}</td>
+                  <td style={{ border: '1px solid #ddd', padding: '8px', fontFamily: 'Times New Roman' }}>{leave.employee}</td>
+                  <td style={{ border: '1px solid #ddd', padding: '8px', fontFamily: 'Times New Roman' }}>{leave.leaveType}</td>
+                  <td style={{ border: '1px solid #ddd', padding: '8px', fontFamily: 'Times New Roman' }}>{leave.reason}</td>
+                  <td style={{ border: '1px solid #ddd', padding: '8px', fontFamily: 'Times New Roman' }}>{new Date(leave.startDate).toLocaleDateString()}</td>
+                  <td style={{ border: '1px solid #ddd', padding: '8px', fontFamily: 'Times New Roman' }}>{new Date(leave.endDate).toLocaleDateString()}</td>
+                  <td style={{ border: '1px solid #ddd', padding: '8px', fontFamily: 'Times New Roman' }}>
+                    <button
+                      style={{ backgroundColor: 'green', color: 'white', marginRight: '5px' }}
+                      onClick={() => this.handleApprove(leave.id)}
+                    >
+                      Approve
+                    </button>
+                    <button
+                      style={{ backgroundColor: 'red', color: 'white', fontFamily: 'Times New Roman' }}
+                      onClick={() => this.handleReject(leave.id)}
+                    >
+                      Reject
+                    </button>
+                  </td>
+                </tr>
+              ))}
               </tbody>
             </table>
           </div>
