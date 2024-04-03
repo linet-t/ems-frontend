@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Section from './Section'; // Import the Section component
 import { Box, Button, TextField, Typography, Container, Grid, Avatar } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import axios from 'axios';
 
 const LeaveEmployee = () => {
   const [leaveData, setLeaveData] = useState({
@@ -36,7 +36,7 @@ const LeaveEmployee = () => {
       return;
     }
 
-    axios.post('http://localhost:8080/leave/apply', leaveData)
+    axios.post('http://localhost:8080/leave/save', leaveData)
       .then((res) => {
         console.log(res);
         alert('Leave application submitted successfully');
@@ -61,22 +61,12 @@ const LeaveEmployee = () => {
       });
   };
 
-  const linkStyle = {
-    textDecoration: 'none',
-    color: 'black',
-    display: 'block',
-    marginTop: '30px',
-    fontFamily: 'Times New Roman',
-    textAlign: 'center'
-  };
-
   return (
     <div>
       <Navbar />
-      <div className="container-fluid" style={{ marginTop: '70px' }}> {/* Adjusted top margin */}
+      <div className="container-fluid" style={{ marginTop: '70px' }}>
         <div className="row">
           <div className="col-12 col-md-3">
-            {/* Use the Section component here */}
             <Section />
           </div>
           <div className="col-12 col-md-9">
@@ -187,7 +177,7 @@ const LeaveEmployee = () => {
                       </Grid>
                     </Grid>
                     <Button
-                      type="submit"
+                      type="button"
                       fullWidth
                       variant="contained"
                       color="primary"
