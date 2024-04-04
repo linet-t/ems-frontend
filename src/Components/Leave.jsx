@@ -1,4 +1,6 @@
-// Update the Leave component
+// Leave.jsx
+
+// Existing imports...
 import React, { Component } from 'react';
 import axios from 'axios';
 import Footer from './Footer';
@@ -14,18 +16,32 @@ class Leave extends Component {
 
   async componentDidMount() {
     try {
-      const response = await axios.get('http://localhost:8080/leave/list');
+      const response = await axios.get('http://localhost:8080/leave/pending');
+      console.log('Backend Response:', response.data);
       this.setState({ pendingLeave: response.data });
     } catch (error) {
       console.error('Error fetching leave data:', error);
     }
   }
-  
 
+  handleReject = async (id) => {
+    try {
+      await axios.post(`http://localhost:8080/leave/reject/${id}`);
+      // Instead of filtering out the leave request, you can directly fetch the updated list
+      const response = await axios.get('http://localhost:8080/leave/pending');
+      this.setState({ pendingLeave: response.data }, () => {
+        alert('Leave rejected successfully.');
+      });
+    } catch (error) {
+      console.error('Error rejecting leave:', error);
+    }
+  };
+  
+  
   handleApprove = async (id) => {
     try {
       await axios.post(`http://localhost:8080/leave/approve/${id}`);
-      const updatedLeave = this.state.pendingLeave.filter((leave) => leave[0] !== id);
+      const updatedLeave = this.state.pendingLeave.filter((leave) => leave.id !== id);
       this.setState({ pendingLeave: updatedLeave }, () => {
         alert('Leave approved successfully.');
       });
@@ -34,23 +50,11 @@ class Leave extends Component {
     }
   };
   
-  handleReject = async (id) => {
-    try {
-      const reason = prompt('Enter reason for rejection:');
-      if (reason) {
-        await axios.post(`http://localhost:8080/leave/reject/${id}`, { reason });
-        const updatedLeave = this.state.pendingLeave.filter((leave) => leave[0] !== id);
-        this.setState({ pendingLeave: updatedLeave }, () => {
-          alert('Leave rejected successfully.');
-        });
-      } else {
-        alert('Please enter a reason for rejection.');
-      }
-    } catch (error) {
-      console.error('Error rejecting leave:', error);
-    }
+  formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString(); // Format date as "YYYY-MM-DD"
   };
-  
+
   render() {
     const { pendingLeave } = this.state;
 
@@ -64,34 +68,36 @@ class Leave extends Component {
             <table style={{ borderCollapse: 'collapse', width: '100%' }}>
               <thead>
                 <tr style={{ backgroundColor: '#333', color: '#fff', fontFamily: 'Times New Roman' }}>
-                  <th style={{ border: '1px solid #ddd', padding: '8px' }}>ID</th>
-                  <th style={{ border: '1px solid #ddd', padding: '8px' }}>Employee</th>
-                  <th style={{ border: '1px solid #ddd', padding: '8px' }}>Leave Type</th>
-                  <th style={{ border: '1px solid #ddd', padding: '8px' }}>Reason</th>
-                  <th style={{ border: '1px solid #ddd', padding: '8px' }}>Start Date</th>
-                  <th style={{ border: '1px solid #ddd', padding: '8px' }}>End Date</th>
-                  <th style={{ border: '1px solid #ddd', padding: '8px' }}>Action</th>
+                  <th style={{ border: '1px solid #ddd', padding: '8px', textAlign:'center' }}>ID</th>
+                  <th style={{ border: '1px solid #ddd', padding: '8px', textAlign:'center' }}>Employee Name</th>
+                  <th style={{ border: '1px solid #ddd', padding: '8px', textAlign:'center' }}>Department</th>
+                  <th style={{ border: '1px solid #ddd', padding: '8px', textAlign:'center' }}>Leave Type</th>
+                  <th style={{ border: '1px solid #ddd', padding: '8px', textAlign:'center' }}>Reason</th>
+                  <th style={{ border: '1px solid #ddd', padding: '8px', textAlign:'center' }}>Start Date</th>
+                  <th style={{ border: '1px solid #ddd', padding: '8px', textAlign:'center' }}>End Date</th>
+                  <th style={{ border: '1px solid #ddd', padding: '8px' , textAlign:'center'}}>Action</th>
                 </tr>
               </thead>
               <tbody>
-                {pendingLeave.map((leave, index) => (
+                {pendingLeave.map((leave) => (
                   <tr key={leave.id} style={{ backgroundColor: '#fff' }}>
-                    <td style={{ border: '1px solid #ddd', padding: '8px', fontFamily: 'Times New Roman' }}>{index + 1}</td>
-                    <td style={{ border: '1px solid #ddd', padding: '8px', fontFamily: 'Times New Roman' }}>{leave[1]}</td>
-                    <td style={{ border: '1px solid #ddd', padding: '8px', fontFamily: 'Times New Roman' }}>{leave[2]}</td>
-                    <td style={{ border: '1px solid #ddd', padding: '8px', fontFamily: 'Times New Roman' }}>{leave[3]}</td>
-                    <td style={{ border: '1px solid #ddd', padding: '8px', fontFamily: 'Times New Roman' }}>{new Date(leave[4]).toLocaleDateString()}</td>
-                    <td style={{ border: '1px solid #ddd', padding: '8px', fontFamily: 'Times New Roman' }}>{new Date(leave[5]).toLocaleDateString()}</td>
+                    <td style={{ border: '1px solid #ddd', padding: '8px', fontFamily: 'Times New Roman' , textAlign:'center'}}>{leave.id}</td>
+                    <td style={{ border: '1px solid #ddd', padding: '8px', fontFamily: 'Times New Roman', textAlign:'center' }}>{leave.employeeName || 'N/A'}</td>
+                    <td style={{ border: '1px solid #ddd', padding: '8px', fontFamily: 'Times New Roman', textAlign:'center' }}>{leave.department || 'N/A'}</td>
+                    <td style={{ border: '1px solid #ddd', padding: '8px', fontFamily: 'Times New Roman' , textAlign:'center'}}>{leave.leaveType || 'N/A'}</td>
+                    <td style={{ border: '1px solid #ddd', padding: '8px', fontFamily: 'Times New Roman' }}>{leave.reason || 'N/A'}</td>
+                    <td style={{ border: '1px solid #ddd', padding: '8px', fontFamily: 'Times New Roman' }}>{this.formatDate(leave.startDate) || 'N/A'}</td>
+                    <td style={{ border: '1px solid #ddd', padding: '8px', fontFamily: 'Times New Roman' }}>{this.formatDate(leave.endDate) || 'N/A'}</td>
                     <td style={{ border: '1px solid #ddd', padding: '8px', fontFamily: 'Times New Roman' }}>
                       <button
-                        style={{ backgroundColor: 'green', color: 'white', marginRight: '5px' }}
-                        onClick={() => this.handleApprove(leave[0])}
+                        style={{ backgroundColor: 'green', color: 'white', marginRight: '5px'}}
+                        onClick={() => this.handleApprove(leave.id)}
                       >
                         Approve
                       </button>
                       <button
                         style={{ backgroundColor: 'red', color: 'white', fontFamily: 'Times New Roman' }}
-                        onClick={() => this.handleReject(leave[0])}
+                        onClick={() => this.handleReject(leave.id)}
                       >
                         Reject
                       </button>

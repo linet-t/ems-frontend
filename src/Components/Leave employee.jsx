@@ -2,13 +2,26 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Navbar from './Navbar';
 import Footer from './Footer';
-import Section from './Section'; // Import the Section component
-import { Box, Button, TextField, Typography, Container, Grid, Avatar } from '@mui/material';
+import Section from './Section';
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  Container,
+  Grid,
+  Avatar,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
+  CircularProgress
+} from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
 const LeaveEmployee = () => {
   const [leaveData, setLeaveData] = useState({
-    employeeId: '',
+    empId: '', // Modified: Changed from 'employeeId' to 'empId'
     leaveType: '',
     startDate: '',
     endDate: '',
@@ -16,23 +29,28 @@ const LeaveEmployee = () => {
   });
 
   const [errors, setErrors] = useState({
-    employeeId: false,
+    empId: false, // Modified: Changed from 'employeeId' to 'empId'
     leaveType: false,
     startDate: false,
     endDate: false,
     reason: false
   });
 
+  const [loading, setLoading] = useState(false);
+
   const captureLeaveData = () => {
+    setLoading(true);
+
     // Check if all fields are filled
-    if (!leaveData.employeeId || !leaveData.leaveType || !leaveData.startDate || !leaveData.endDate || !leaveData.reason) {
+    if (!leaveData.empId || !leaveData.leaveType || !leaveData.startDate || !leaveData.endDate || !leaveData.reason) {
       setErrors({
-        employeeId: !leaveData.employeeId,
+        empId: !leaveData.empId,
         leaveType: !leaveData.leaveType,
         startDate: !leaveData.startDate,
         endDate: !leaveData.endDate,
         reason: !leaveData.reason
       });
+      setLoading(false);
       return;
     }
 
@@ -41,23 +59,25 @@ const LeaveEmployee = () => {
         console.log(res);
         alert('Leave application submitted successfully');
         setLeaveData({
-          employeeId: '',
+          empId: '', // Modified: Changed from 'employeeId' to 'empId'
           leaveType: '',
           startDate: '',
           endDate: '',
           reason: ''
         });
         setErrors({
-          employeeId: false,
+          empId: false, // Modified: Changed from 'employeeId' to 'empId'
           leaveType: false,
           startDate: false,
           endDate: false,
           reason: false
         });
+        setLoading(false);
       })
       .catch((error) => {
         console.error('Error submitting leave application:', error);
         alert('Failed to submit leave application. Please try again.');
+        setLoading(false);
       });
   };
 
@@ -100,7 +120,7 @@ const LeaveEmployee = () => {
                   <Typography component="h1" variant="h6" fontWeight="bold" style={{ fontFamily: 'Arial', marginTop: '10px' }}>
                     Leave Application
                   </Typography>
-                  <form onSubmit={(e) => e.preventDefault()} style={{ width: '100%', marginTop: '1rem' }}>
+                  <form style={{ width: '100%', marginTop: '1rem' }}>
                     <Grid container spacing={2}>
                       <Grid item xs={12}>
                         <TextField
@@ -108,25 +128,36 @@ const LeaveEmployee = () => {
                           label="Employee ID"
                           fullWidth
                           required
-                          error={errors.employeeId}
-                          value={leaveData.employeeId}
-                          onChange={(event) => setLeaveData({ ...leaveData, employeeId: event.target.value })}
-                          helperText={errors.employeeId ? "Employee ID is required" : ""}
-                          sx={{ '& label.Mui-focused': { color: 'black' }, '& .MuiOutlinedInput-root': { '&.Mui-focused fieldset': { borderColor: 'black' } } }}
+                          error={errors.empId} // Modified: Changed from 'employeeId' to 'empId'
+                          value={leaveData.empId} // Modified: Changed from 'employeeId' to 'empId'
+                          onChange={(event) => setLeaveData({ ...leaveData, empId: event.target.value })} // Modified: Changed from 'employeeId' to 'empId'
+                          helperText={errors.empId ? "Employee ID is required" : ""}
                         />
                       </Grid>
                       <Grid item xs={12}>
-                        <TextField
-                          id="leaveType"
-                          label="Leave Type"
-                          fullWidth
-                          required
-                          error={errors.leaveType}
-                          value={leaveData.leaveType}
-                          onChange={(event) => setLeaveData({ ...leaveData, leaveType: event.target.value })}
-                          helperText={errors.leaveType ? "Leave type is required" : ""}
-                          sx={{ '& label.Mui-focused': { color: 'black' }, '& .MuiOutlinedInput-root': { '&.Mui-focused fieldset': { borderColor: 'black' } } }}
-                        />
+                        <FormControl fullWidth required error={errors.leaveType}>
+                          <InputLabel id="leaveType-label">Leave Type</InputLabel>
+                          <Select
+                            labelId="leaveType-label"
+                            id="leaveType"
+                            value={leaveData.leaveType}
+                            onChange={(event) => setLeaveData({ ...leaveData, leaveType: event.target.value })}
+                            label="Leave Type"
+                          >
+                            <MenuItem value="">Select Leave Type</MenuItem>
+                            <MenuItem value="PL">Privilege Leave (PL)</MenuItem>
+                            <MenuItem value="EL">Earned Leave (EL)</MenuItem>
+                            <MenuItem value="CL">Casual Leave (CL)</MenuItem>
+                            <MenuItem value="SL">Sick Leave (SL)</MenuItem>
+                            <MenuItem value="ML">Maternity Leave (ML)</MenuItem>
+                            <MenuItem value="Comp-off">Compensatory Off (Comp-off)</MenuItem>
+                            <MenuItem value="Marriage Leave">Marriage Leave</MenuItem>
+                            <MenuItem value="Paternity Leave">Paternity Leave</MenuItem>
+                            <MenuItem value="Bereavement Leave">Bereavement Leave</MenuItem>
+                            <MenuItem value="LOP">Loss of Pay (LOP) / Leave Without Pay (LWP)</MenuItem>
+                          </Select>
+                          {errors.leaveType && <Typography variant="caption" color="error">Leave type is required</Typography>}
+                        </FormControl>
                       </Grid>
                       <Grid item xs={12}>
                         <TextField
@@ -142,7 +173,6 @@ const LeaveEmployee = () => {
                             shrink: true,
                           }}
                           helperText={errors.startDate ? "Start date is required" : ""}
-                          sx={{ '& label.Mui-focused': { color: 'black' }, '& .MuiOutlinedInput-root': { '&.Mui-focused fieldset': { borderColor: 'black' } } }}
                         />
                       </Grid>
                       <Grid item xs={12}>
@@ -159,7 +189,6 @@ const LeaveEmployee = () => {
                             shrink: true,
                           }}
                           helperText={errors.endDate ? "End date is required" : ""}
-                          sx={{ '& label.Mui-focused': { color: 'black' }, '& .MuiOutlinedInput-root': { '&.Mui-focused fieldset': { borderColor: 'black' } } }}
                         />
                       </Grid>
                       <Grid item xs={12}>
@@ -172,7 +201,6 @@ const LeaveEmployee = () => {
                           value={leaveData.reason}
                           onChange={(event) => setLeaveData({ ...leaveData, reason: event.target.value })}
                           helperText={errors.reason ? "Reason is required" : ""}
-                          sx={{ '& label.Mui-focused': { color: 'black' }, '& .MuiOutlinedInput-root': { '&.Mui-focused fieldset': { borderColor: 'black' } } }}
                         />
                       </Grid>
                     </Grid>
@@ -183,8 +211,9 @@ const LeaveEmployee = () => {
                       color="primary"
                       style={{ margin: '1rem 0', backgroundColor: 'black' }}
                       onClick={captureLeaveData}
+                      disabled={loading}
                     >
-                      Apply
+                      {loading ? <CircularProgress size={24} color="inherit" /> : 'Apply'}
                     </Button>
                   </form>
                 </Box>
