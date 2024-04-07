@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import Footer from './Footer';
+
 import Navbar2 from './Navbar2';
 import Section1 from './Section1';
 
@@ -104,7 +104,7 @@ class Leave extends Component {
             </div>
           </div>
         </div>
-        <Footer />
+     
       </div>
     );
   }

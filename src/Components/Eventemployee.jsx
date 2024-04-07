@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, Typography, Pagination } from '@mui/material';
 import Navbar2 from './Navbar2';
-import Footer from './Footer';
+
 import Section from './Section'; 
 
 const Eventemployee = () => {
@@ -28,12 +28,12 @@ const Eventemployee = () => {
   const endIdx = page * itemsPerPage;
 
   return (
-    <div>
-      <Navbar2 />
-      <div style={{ display: 'flex' }}>
-        <div className="col-12 col-md-3">
-          <Section />
-        </div>
+    <div className='row'>
+    <Navbar2/>
+    <div className="col-3 col-md-3">
+      <Section/>
+    </div>
+    <div className="col-9 col-md-9">
        
         <div style={{ flex: 1, padding: '20px' }}>
           <div style={{ textAlign: 'center', margin: '20px 0' }}>
@@ -75,9 +75,10 @@ const Eventemployee = () => {
             style={{ marginTop: '20px' }}
           />
         </div>
+        </div>
       </div>
-      <Footer />
-    </div>
+    
+   
   );
 };
 

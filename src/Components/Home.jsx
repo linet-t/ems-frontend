@@ -49,10 +49,11 @@ const Home = () => {
             <div id="about" className="image1-container">           
                 <img src={image1} alt="Description of the image" />
                 <div className="text-container">
-                    <h2 className="welcome-text">Empowering Lives with Innovative Electronics Solutions</h2>
-                    <p className="text">
-                    Welcome to IEC Your trusted partner in cutting-edge electronics solutions. From consumer electronics to industrial automation, we deliver excellence in innovation and technology.
-                    </p>
+                <h2 className="welcome-text" >Empowering Lives with Innovative Electronics Solutions</h2>
+<p className="text" >
+  Welcome to IEC Your trusted partner in cutting-edge electronics solutions. From consumer electronics to industrial automation, we deliver excellence in innovation and technology.
+</p>
+
                     <button className="service-button">
                         <a href="#services" style={{ textDecoration: 'none', color: 'inherit' }}>OUR SERVICES</a>
                     </button>
@@ -119,7 +120,7 @@ const Home = () => {
                             <label htmlFor="userQuestion" className="form-label">Your Question/Inquiry</label>
                             <textarea className="form-control" id="userQuestion" value={formData.userQuestion} onChange={handleChange} rows="4" required></textarea>
                         </div>
-                        <button type="submit" className="btn btn-primary">
+                        <button type="submit" className="btn btn-dark">
                             {isSubmitted ? 'Form submitted successfully to the organization.' : 'Submit'}
                         </button>
                     </form>

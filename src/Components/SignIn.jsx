@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; 
-import Navbar from './Navbar'; 
+import { useNavigate } from 'react-router-dom';
+import Navbar from './Navbar';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -11,45 +11,54 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Footer from './Footer';
+import Snackbar from '@mui/material/Snackbar';
+import SnackbarContent from '@mui/material/SnackbarContent';
 
 const theme = createTheme();
 
 const SignIn = () => {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+
+  const handleSnackbarClose = () => {
+    setOpenSnackbar(false);
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-        const response = await fetch('http://localhost:8080/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email, password }),
-        });
-        if (response.ok) {
-          const data = await response.json(); 
-          console.log("Response from backend:", data); // Add this line
-          if (data.message === "Signin successful for admin") {               
-              navigate("/Admin");
-          } else if (data) { // Check if data is truthy
-              sessionStorage.setItem("empId", data.userId); // Assuming data is the userId
-              console.log("Employee ID:", data.userId); // Log the employee ID
-              navigate("/Employee");
-          }
+      const response = await fetch('http://localhost:8080/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Response from backend:", data);
+        if (data.message === "Signin successful for admin") {
+          navigate("/Admin");
+        } else if (data) {
+          sessionStorage.setItem("empId", data.userId);
+          console.log("Employee ID:", data.userId);
+          navigate("/Employee");
+        }
       } else {
-          throw new Error('Signin failed');
+        throw new Error('Signin failed');
       }
-      
+
     } catch (error) {
-        console.error('Fetch error:', error);
-        alert('Signin failed. Please try again.');
+      console.error('Fetch error:', error);
+      setSnackbarMessage('Signin failed. Please try again.');
+      setOpenSnackbar(true);
     }
   };
-  
+
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
   };
@@ -67,12 +76,12 @@ const SignIn = () => {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          justifyContent: 'center', 
+          justifyContent: 'center',
         }}
       >
         <CssBaseline />
-        <Navbar /> 
-        <Box sx={{ textAlign: 'center', width: '100%', marginTop: '2rem' }}> {/* Added marginTop */}
+        <Navbar />
+        <Box sx={{ textAlign: 'center', width: '100%', marginTop: '2rem' }}>
           <Container component="main" maxWidth="xs">
             <Box
               sx={{
@@ -91,7 +100,7 @@ const SignIn = () => {
               <Avatar sx={{ m: 1, bgcolor: 'secondary.main', backgroundColor: 'red' }}>
                 <LockOutlinedIcon />
               </Avatar>
-              <Typography  component="h1" variant="h6" fontWeight="bold" style={{ fontFamily: 'Arial' }}>
+              <Typography component="h1" variant="h6" fontWeight="bold" style={{ fontFamily: 'Arial' }}>
                 Sign In
               </Typography>
               <form noValidate onSubmit={handleSubmit} style={{ width: '100%', }}>
@@ -138,6 +147,20 @@ const SignIn = () => {
         </Box>
       </Box>
       <Footer />
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'centre',
+        }}
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+      >
+        <SnackbarContent
+          sx={{ backgroundColor: 'red' }} // Change the background color here
+          message={snackbarMessage}
+        />
+      </Snackbar>
     </ThemeProvider>
   );
 };

@@ -9,7 +9,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Footer from './Footer';
+
 import Navbar2 from './Navbar2';
 import Section1 from './Section1';
 
@@ -301,7 +301,7 @@ const SignUp = () => {
           </Box>
         </Container>
       </Box>
-      <Footer />
+     
     </ThemeProvider>
     </div>
     </div>

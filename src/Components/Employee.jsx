@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Navbar2 from './Navbar2';
-import Footer from './Footer';
 import { Link } from 'react-router-dom';
 import Section from './Section';
 
@@ -18,19 +17,10 @@ const Employee = () => {
       });
   }, []);
 
-  const linkStyle = {
-    textDecoration: 'none',
-    color: 'black',
-    display: 'block',
-    marginTop: '30px',
-    fontFamily: 'Times New Roman',
-    textAlign: 'center'
-  };
-  
   return (
     <div>
       <Navbar2 />
-      <div className="container-fluid" style={{ marginTop: '70px' }}>
+      <div className="container-fluid">
         <div className="row">
           <div className="col-12 col-md-3">
             <Section />
@@ -77,7 +67,6 @@ const Employee = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 }
