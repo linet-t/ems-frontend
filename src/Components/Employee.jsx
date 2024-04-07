@@ -30,44 +30,21 @@ const Employee = () => {
   return (
     <div>
       <Navbar2 />
-      <div className="container-fluid" style={{ marginTop: '70px' }}> {/* Adjusted top margin */}
+      <div className="container-fluid" style={{ marginTop: '70px' }}>
         <div className="row">
           <div className="col-12 col-md-3">
             <Section />
           </div>
+          
           <div className="col-12 col-md-9">
             <div className="row">
-              <div className="col-12 mt-3">
-                <div className="d-flex justify-content-between">
-                  <div className="card bg-danger text-white" style={{ width: '10rem', height: '7rem' }}>
-                    <div className="card-body">
-                      <h5 className="card-title">Total Task</h5>
-                      <h1 style={{ textAlign: 'center' }}>10</h1>
-                    </div>
-                  </div>
-                  <div className="card bg-success text-white" style={{ width: '10rem', height: '7rem' }}>
-                    <div className="card-body">
-                      <h5 className="card-title">Completed</h5>
-                      <h1 style={{ textAlign: 'center' }}>7</h1>
-                    </div>
-                  </div>
-                  <div className="card bg-warning text-white" style={{ width: '10rem', height: '7rem' }}>
-                    <div className="card-body">
-                      <h5 className="card-title">Pending Task</h5>
-                      <h1 style={{ textAlign: 'center' }}>3</h1>
-                    </div>
-                  </div>
-                  <div className="card bg-info text-white" style={{ width: '10rem', height: '7rem' }}>
-                    <div className="card-body">
-                      <h5 className="card-title">Leave Pending</h5>
-                      <h1 style={{ textAlign: 'center' }}>6</h1>
-                    </div>
-                  </div>
+              <div className="col-12">
+                <div style={{ textAlign: 'center', fontFamily:'times new roman', fontSize:'20px'}}>
+                  <h2>Welcome to the Employee Portal!</h2>
+                  <p>Here, you can access important information and resources related to your work.</p>
                 </div>
               </div>
             </div>
-            <br />
-            <br />
             <div className="row mt-3">
               <div className="col-12">
                 <table className="table" style={{ borderCollapse: 'collapse', width: '100%' }}>
@@ -96,6 +73,7 @@ const Employee = () => {
                 </table>
               </div>
             </div>
+            
           </div>
         </div>
       </div>

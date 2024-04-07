@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Navbar2 from './Navbar2';
 import Footer from './Footer';
-import Section from './Section'; // Import the Section component
+import Section from './Section';
 import {
   Box,
   Button,
@@ -33,7 +33,7 @@ const FeedbackEmployee = () => {
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [feedbackList, setFeedbackList] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [showFeedbackForm, setShowFeedbackForm] = useState(false); // State to control the visibility of the feedback form
+  const [showFeedbackForm, setShowFeedbackForm] = useState(false);
 
   const handleSnackbarClose = () => {
     setOpenSnackbar(false);
@@ -43,11 +43,11 @@ const FeedbackEmployee = () => {
     try {
       setLoading(true);
       const empId = sessionStorage.getItem('empId');
-      const response = await axios.get(`http://localhost:8080/feedbacks/list/${empId}`); // Corrected URL
+      const response = await axios.get(`http://localhost:8080/feedbacks/list/${empId}`);
       setFeedbackList(response.data);
     } catch (error) {
       console.error('Error fetching feedback:', error);
-      setFeedbackList([]); // Clear feedback list on error
+      setFeedbackList([]);
     } finally {
       setLoading(false);
     }
@@ -74,9 +74,7 @@ const FeedbackEmployee = () => {
         setFeedbackData({ feedback: '' });
         setSubmitting(false);
         setSubmissionError('');
-        // Fetch feedback after successful submission
         fetchFeedback();
-        // Show the table and hide the form after submission
         setShowFeedbackForm(false);
       })
       .catch((error) => {
@@ -88,7 +86,6 @@ const FeedbackEmployee = () => {
   
 
   useEffect(() => {
-    // Fetch feedback on component mount
     fetchFeedback();
   }, []);
 
@@ -103,10 +100,9 @@ const FeedbackEmployee = () => {
   return (
     <div>
       <Navbar2 />
-      <div className="container-fluid" style={{ marginTop: '70px' }}>
+      <div className="container-fluid">
         <div className="row">
           <div className="col-12 col-md-3">
-            {/* Keep the Section component fixed */}
             <Section />
           </div>
           <div className="col-12 col-md-9">
@@ -117,67 +113,21 @@ const FeedbackEmployee = () => {
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
-                marginTop: '80px', // Move the marginTop here to ensure consistent spacing
+                marginTop: '20px',
                 marginBottom: '20px',
               }}
             >
               <Container component="main" maxWidth="xs">
-                <Box
-                  sx={{
-                    display: showFeedbackForm ? 'none' : 'block', // Show feedback table if form is not displayed
-                  }}
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => setShowFeedbackForm(true)}
+                  style={{ backgroundColor: '#1976d2', marginBottom: '10px' }}
                 >
-                  <TableContainer component={Paper} sx={{ marginTop: '20px' }}>
-                    <Table aria-label="feedback table">
-                      <TableHead >
-                        <TableRow>
-                          <TableCell>
-                            <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>ID</Typography>
-                          </TableCell>
-                          <TableCell>
-                            <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>Feedback</Typography>
-                          </TableCell>
-                          <TableCell>
-                            <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>Reply</Typography>
-                          </TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody style={{ border: '1px solid #ddd', padding: '8px' }}>
-                        {loading ? (
-                          <TableRow>
-                            <TableCell colSpan={3}>Loading...</TableCell>
-                          </TableRow>
-                        ) : feedbackList.length === 0 ? (
-                          <TableRow>
-                            <TableCell colSpan={3}>No feedback found</TableCell>
-                          </TableRow>
-                        ) : (
-                          feedbackList.map((feedback, index) => (
-                            <TableRow key={index}>
-                              <TableCell>{index + 1}</TableCell>
-                              <TableCell>{feedback.feedback}</TableCell>
-                              <TableCell>{feedback.reply}</TableCell>
-                            </TableRow>
-                          ))
-                        )}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                  <Box
-                    sx={{
-                      marginTop: '30px',
-                    }}
-                  >
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => setShowFeedbackForm(true)} // Show feedback form on button click
-                      style={{ backgroundColor: '#1976d2', marginBottom: '10px' }}
-                    >
-                      Add Feedback
-                    </Button>
-                  </Box>
-                </Box>
+                  Add Feedback
+                </Button>
+                <br />
+                <br />
                 <Box
                   sx={{
                     backgroundColor: 'white',
@@ -185,9 +135,10 @@ const FeedbackEmployee = () => {
                     borderRadius: 8,
                     border: '2px solid #ccc',
                     boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
-                    display: showFeedbackForm ? 'block' : 'none', // Show feedback form if enabled
+                    display: showFeedbackForm ? 'block' : 'none',
                     flexDirection: 'column',
                     alignItems: 'center',
+                    marginTop: '20px', // Adjusted marginTop for the form
                   }}
                 >
                   <Avatar sx={{ m: 1, bgcolor: 'secondary.main', backgroundColor: 'red' }}>
@@ -226,6 +177,42 @@ const FeedbackEmployee = () => {
                     </Button>
                   </form>
                 </Box>
+                <TableContainer component={Paper}>
+                  <Table aria-label="feedback table">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>
+                          <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>ID</Typography>
+                        </TableCell>
+                        <TableCell>
+                          <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>Feedback</Typography>
+                        </TableCell>
+                        <TableCell>
+                          <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>Reply</Typography>
+                        </TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {loading ? (
+                        <TableRow>
+                          <TableCell colSpan={3}>Loading...</TableCell>
+                        </TableRow>
+                      ) : feedbackList.length === 0 ? (
+                        <TableRow>
+                          <TableCell colSpan={3}>No feedback found</TableCell>
+                        </TableRow>
+                      ) : (
+                        feedbackList.map((feedback, index) => (
+                          <TableRow key={index}>
+                            <TableCell>{index + 1}</TableCell>
+                            <TableCell>{feedback.feedback}</TableCell>
+                            <TableCell>{feedback.reply}</TableCell>
+                          </TableRow>
+                        ))
+                      )}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
               </Container>
             </Box>
           </div>
@@ -234,15 +221,15 @@ const FeedbackEmployee = () => {
       <Footer />
       <Snackbar
         anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
+          vertical: 'top', // Set the Snackbar to top
+          horizontal: 'center', // Center the Snackbar horizontally
         }}
         open={openSnackbar}
         autoHideDuration={6000}
         onClose={handleSnackbarClose}
         message={snackbarMessage}
         ContentProps={{
-          style: snackbarLightStyle, // You can change to snackbarDarkStyle for dark theme
+          style: snackbarLightStyle,
         }}
       />
     </div>
