@@ -1,10 +1,12 @@
+
 import React, { useState } from 'react';
 import axios from 'axios';
-import Navbar1 from './Navbar1';
+import Navbar2 from './Navbar2';
 import Footer from './Footer';
 import { Box, Button, TextField, Typography, Container, Grid, CssBaseline, Avatar } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Section1 from './Section1';
 
 const theme = createTheme();
 
@@ -57,12 +59,18 @@ const Task = () => {
   
 
   return (
+    
+    <div className='row'>
+      <Navbar2/>
+      <div className="col-3 col-md-3">
+        <Section1/>
+      </div>
+      <div className="col-9 col-md-9">
     <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Navbar1 />
+     <CssBaseline />
       <Box
         sx={{
-          backgroundColor: 'rgb(224, 224, 224)', // Dark grey background color
+         
 
           minHeight: '100vh', // Set minimum height to fill the screen
           display: 'flex',
@@ -149,8 +157,10 @@ const Task = () => {
           </Box>
         </Container>
       </Box>
-      <Footer />
+     
     </ThemeProvider>
+    </div>
+    </div>
   );
 };
 

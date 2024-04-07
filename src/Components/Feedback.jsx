@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import Navbar1 from './Navbar1';
+import Navbar2 from './Navbar2';
 import Footer from './Footer';
+import Section1 from './Section1';
 
 class Feedback extends Component {
   constructor(props) {
@@ -46,8 +47,12 @@ class Feedback extends Component {
     const { feedback, showReplyForm, reply } = this.state;
 
     return (
-      <div>
-        <Navbar1 />
+      <div className='row'>
+        <Navbar2 />
+        <div className="col-3 col-md-3">
+            <Section1/>
+        </div>
+        <div className="col-9 col-md-9">
         <h2 style={{ textAlign: 'center', fontFamily: 'Times New Roman', marginTop: '80px' }}>FEEDBACKS</h2>
 
         <div style={{ display: 'flex', justifyContent: 'center', padding: '20px' }}>
@@ -104,7 +109,7 @@ class Feedback extends Component {
             )}
           </div>
         </div>
-        <Footer />
+        </div>
       </div>
     );
   }

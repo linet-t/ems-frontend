@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Navbar from './Navbar';
+import Navbar2 from './Navbar2';
 import Footer from './Footer';
 import { Link } from 'react-router-dom';
 import Section from './Section';
@@ -29,7 +29,7 @@ const Employee = () => {
   
   return (
     <div>
-      <Navbar />
+      <Navbar2 />
       <div className="container-fluid" style={{ marginTop: '70px' }}> {/* Adjusted top margin */}
         <div className="row">
           <div className="col-12 col-md-3">

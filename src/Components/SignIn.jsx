@@ -31,26 +31,25 @@ const SignIn = () => {
             body: JSON.stringify({ email, password }),
         });
         if (response.ok) {
-            const data = await response.json(); 
-            if (data.message === "Signin successful for admin") {               
-                navigate("/Admin");
-            } else if (data.message === "Signin successful for staff") {    
-                       
-                sessionStorage.setItem("empId", data.userId);
-
-
-                console.log("Employee ID:", data.userId);               
-                navigate("/Employee");
-            }
-        } else {
-            throw new Error('Signin failed');
-        }
+          const data = await response.json(); 
+          console.log("Response from backend:", data); // Add this line
+          if (data.message === "Signin successful for admin") {               
+              navigate("/Admin");
+          } else if (data) { // Check if data is truthy
+              sessionStorage.setItem("empId", data.userId); // Assuming data is the userId
+              console.log("Employee ID:", data.userId); // Log the employee ID
+              navigate("/Employee");
+          }
+      } else {
+          throw new Error('Signin failed');
+      }
+      
     } catch (error) {
         console.error('Fetch error:', error);
         alert('Signin failed. Please try again.');
     }
   };
-
+  
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
   };

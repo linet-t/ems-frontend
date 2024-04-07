@@ -1,11 +1,13 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import Navbar from './Navbar';
-import { Card, CardContent, Typography, Button } from '@mui/material'; // Import Button from @mui/material
+import { Card, CardContent, Typography } from '@mui/material';
 
 const Taskemployee = () => {
   // Access the employee ID from sessionStorage
-  const empId = sessionStorage.getItem('empId');
+ 
+  const empId = sessionStorage.getItem("empId"); // Notice the string "empId" inside getItem()
+
   
   const [tasks, setTasks] = useState([]);
   const [totalTasks, setTotalTasks] = useState(0);
@@ -16,34 +18,35 @@ const Taskemployee = () => {
     fetchTaskData();
   }, []);
 
-  const fetchTaskData = async () => {
+  const fetchTaskData =  () => {
     try {
       // Fetch total, pending, and completed task counts
-      const totalResponse = await axios.get('http://localhost:8080/task/totalTaskCount');
-      const pendingResponse = await axios.get('http://localhost:8080/task/pendingTaskCount');
-      const completedResponse = await axios.get('http://localhost:8080/task/completedTaskCount');
+      const totalResponse =  axios.get('http://localhost:8080/task/totalTaskCount');
+      const pendingResponse =  axios.get('http://localhost:8080/task/pendingTaskCount');
+      const completedResponse =  axios.get('http://localhost:8080/task/completedTaskCount');
 
       setTotalTasks(totalResponse.data);
       setPendingTasks(pendingResponse.data);
       setCompletedTasks(completedResponse.data);
 
       // Fetch tasks assigned to the employee
-      const tasksResponse = await axios.post('http://localhost:8080/task/taskemployee', { id: empId });
+      const tasksResponse =  axios.post('http://localhost:8080/task/taskemployee',   { id: empId } );
       setTasks(tasksResponse.data);
     } catch (error) {
       console.error('Error fetching task data:', error);
     }
   };
 
-  const handleCompleteTask = async (taskId) => {
+  const handleCompleteTask = (task_id) => {
     try {
-      // Add quotes around the URL
-      await axios.patch(`http://localhost:8080/task/complete/${taskId}`);
-      fetchTaskData();
+       axios.post(`http://localhost:8080/task/complete/${task_id}`);
+      fetchTaskData(); // Fetch updated task data after marking task as completed
     } catch (error) {
       console.error('Error completing task:', error);
     }
   };
+  
+  
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -94,7 +97,6 @@ const Taskemployee = () => {
               <Typography variant="body1" component="div">
                 Task Count: {task.task_count}
               </Typography>
-              {/* Render Button from @mui/material */}
               <Button variant="contained" onClick={() => handleCompleteTask(task.task_id)}>Complete Task</Button>
             </CardContent>
           </Card>

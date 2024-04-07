@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import Navbar from './Navbar';
+import Navbar2 from './Navbar2';
 import Footer from './Footer';
 import Section from './Section';
 import {
@@ -15,7 +15,8 @@ import {
   Select,
   FormControl,
   InputLabel,
-  CircularProgress
+  CircularProgress,
+  Snackbar,
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
@@ -37,6 +38,12 @@ const LeaveEmployee = () => {
   });
 
   const [loading, setLoading] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+
+  const handleSnackbarClose = () => {
+    setOpenSnackbar(false);
+  };
 
   const captureLeaveData = () => {
     setLoading(true);
@@ -57,7 +64,8 @@ const LeaveEmployee = () => {
     axios.post('http://localhost:8080/leave/save', leaveData)
       .then((res) => {
         console.log(res);
-        alert('Leave application submitted successfully');
+        setSnackbarMessage('Leave application submitted successfully');
+        setOpenSnackbar(true);
         setLeaveData({
           empId: '', // Modified: Changed from 'employeeId' to 'empId'
           leaveType: '',
@@ -76,14 +84,35 @@ const LeaveEmployee = () => {
       })
       .catch((error) => {
         console.error('Error submitting leave application:', error);
-        alert('Failed to submit leave application. Please try again.');
+        setSnackbarMessage('Failed to submit leave application. Please try again.');
+        setOpenSnackbar(true);
         setLoading(false);
       });
   };
+  <Snackbar
+  anchorOrigin={{
+    vertical: 'top',
+    horizontal: 'center', // Change the horizontal position to center
+  }}
+  open={openSnackbar}
+  autoHideDuration={6000}
+  onClose={handleSnackbarClose}
+  message={snackbarMessage}
+  ContentProps={{
+    style: {
+      backgroundColor: '#4caf50', // Change the background color to green
+      color: 'white', // Change the text color to white
+      fontWeight: 'bold',
+      borderRadius: '8px',
+      boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
+    }
+  }}
+/>
+
 
   return (
     <div>
-      <Navbar />
+      <Navbar2 />
       <div className="container-fluid" style={{ marginTop: '70px' }}>
         <div className="row">
           <div className="col-12 col-md-3">
@@ -92,7 +121,8 @@ const LeaveEmployee = () => {
           <div className="col-12 col-md-9">
             <Box
               sx={{
-                minHeight: '100vh',
+                
+                minHeight: '100vh', // Set minimum height to fill the screen
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
@@ -120,7 +150,7 @@ const LeaveEmployee = () => {
                   <Typography component="h1" variant="h6" fontWeight="bold" style={{ fontFamily: 'Arial', marginTop: '10px' }}>
                     Leave Application
                   </Typography>
-                  <form style={{ width: '100%', marginTop: '1rem' }}>
+                  <form style={{ width: '100%', marginTop: '1rem', }}>
                     <Grid container spacing={2}>
                       <Grid item xs={12}>
                         <TextField
@@ -223,6 +253,16 @@ const LeaveEmployee = () => {
         </div>
       </div>
       <Footer />
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        message={snackbarMessage}
+      />
     </div>
   );
 }
