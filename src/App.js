@@ -10,6 +10,7 @@ import Events from './Components/Events';
 import Feedback from './Components/Feedback';
 import Leave from './Components/Leave';
 import Task from './Components/Task';
+import TaskViewer from './Components/TaskViwer';
 import FeedbackEmployee from './Components/FeedbackEmployee';
 import EventEmployee from './Components/Eventemployee';
 import LeaveEmployee from './Components/Leave employee';
@@ -40,6 +41,7 @@ function App() {
           <Route path="/section" element={<Section />} />
           
         <Route path="/feedback" element={<Feedback />} />
+        <Route path="/taskviewer" element={<TaskViewer/>} />
         </Routes>
       </div>
     </Router>
